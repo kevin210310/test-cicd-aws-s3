@@ -1,9 +1,7 @@
-name: Upload Website
+name: Deploy to S3
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -17,22 +15,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.14.0'  # Actualiza a una versión más reciente
+          node-version: '18'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci  # Mejor que npm install para CI
+        run: npm ci
 
       - name: Build app
         run: npm run build
 
-      - name: Upload to S3
+      - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
-          args: --delete --acl public-read
+          args: --delete --follow-symlinks
         env:
-          SOURCE_DIR: 'dist'  # ← CAMBIO IMPORTANTE: sin la barra al final
+          SOURCE_DIR: 'dist'
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-1'  # Agrega tu región
+          AWS_REGION: 'us-east-1'
