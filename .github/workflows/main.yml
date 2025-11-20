@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Actualiza a una versión más reciente
+          node-version: '22.14.0'  # Actualiza a una versión más reciente
           cache: 'npm'
 
       - name: Install dependencies
